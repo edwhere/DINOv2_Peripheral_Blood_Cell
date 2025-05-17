@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-class SaveBestModel:
+class SaveBestModel2:
     """ Class to save the best model while training. If the current epoch's validation loss is less
     than the previous least loss, then save the model state.
     """
@@ -11,25 +11,28 @@ class SaveBestModel:
     def __init__(self, best_valid_loss=float('inf')):
         self.best_valid_loss = best_valid_loss
 
-    def __call__(self, current_valid_loss, epoch, model, out_dir, name):
+    def __call__(self, current_valid_loss, epoch, model, out_dir, name, labels):
         if current_valid_loss < self.best_valid_loss:
             self.best_valid_loss = current_valid_loss
             print(f"\nBest validation loss: {self.best_valid_loss}")
             print(f"\nSaving best model for epoch: {epoch + 1}\n")
             torch.save({
+                'storage_type': "dv2_best",
                 'epoch': epoch + 1,
                 'model_state_dict': model.state_dict(),
+                'labels': labels,
             }, str(os.path.join(out_dir, 'best_' + name + '.pth')))
 
 
-def save_model(epochs, model, optimizer, criterion, out_dir, name):
-    """ Function to save the trained model to storage.
-    """
+def save_model2(epochs, model, optimizer, criterion, out_dir, name, labels):
+    """ Function to save the trained model to storage."""
     torch.save({
+        'storage_type': 'dv2_final',
         'epoch': epochs,
         'model_state_dict': model.state_dict(),
         'optimizer_state_dict': optimizer.state_dict(),
         'loss': criterion,
+        'labels': labels,
     }, str(os.path.join(out_dir, name + '.pth')))
 
 

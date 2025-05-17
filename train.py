@@ -11,6 +11,7 @@ import model as mod
 import utils as utl
 import constants as con
 import datahandler as dhr
+import errordefs as err
 
 # Defined constants for this script
 SEED = 17
@@ -24,10 +25,6 @@ torch.manual_seed(SEED)
 torch.cuda.manual_seed(SEED)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = True
-
-class DirectoryNotFoundError(Exception):
-    """Raise an exception if a directory does not exist."""
-    pass
 
 
 class InputData:
@@ -76,7 +73,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     if not os.path.isdir(args.data_dir_path):
-        raise DirectoryNotFoundError(f"Unavailable data directory: {args.data_dir_path}")
+        raise err.DirectoryNotFoundError(f"Unavailable data directory: {args.data_dir_path}")
 
     if args.lrate <= 0 or args.lrate >= 1:
         raise ValueError("Learning rate must be larger than 0 and less than 1.")
@@ -188,7 +185,7 @@ def main():
     scheduler = MultiStepLR(optimizer, milestones=SCHEDULER, gamma=0.1)
 
     # Initialize `SaveBestModel` class.
-    save_best_model = utl.SaveBestModel()
+    save_best_model = utl.SaveBestModel2()
 
     # Lists to keep track of losses and accuracies
     trn_loss, val_loss, trn_acc, val_acc = list(), list(), list(), list()
@@ -207,14 +204,14 @@ def main():
         print(f"trn loss: {trn_epoch_loss:.3f}, trn acc: {trn_epoch_acc:.3f}, "
               f"val loss: {val_epoch_loss:.3f}, val acc: {val_epoch_acc:.3f}")
 
-        save_best_model(val_epoch_loss, epoch, model, args.results_dir_path, args.keyword)
+        save_best_model(val_epoch_loss, epoch, model, args.results_dir_path, args.keyword, labels=labels)
         print('-' * 50)
         scheduler.step()
         last_lr = scheduler.get_last_lr()
         print(f"LR for next epoch: {last_lr}")
 
     # Save the trained model weights.
-    utl.save_model(args.epochs, model, optimizer, criterion, args.results_dir_path, args.keyword)
+    utl.save_model2(args.epochs, model, optimizer, criterion, args.results_dir_path, args.keyword, labels=labels)
 
     # Save the loss and accuracy plots.
     utl.save_plots(trn_acc, val_acc, trn_loss, val_loss, args.results_dir_path)
