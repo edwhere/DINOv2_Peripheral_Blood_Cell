@@ -61,6 +61,8 @@ related to a mismatch between np.ndarray and numpy.ndarray.
 
 - tqdm: Tested with version 4.67.1.
 
+- pandas: Tested with version 2.2.3
+
 ### Usage
 
 #### Generate train, validation, and test datasets
@@ -107,7 +109,7 @@ were trained using two modes: (1) As feature-vector extractors with vectors clas
 support vector machine (SVM), and (2) as CNNs that directly classify images. In the first 
 case, they obtained accuracies of 86% (VGG-16) and 90% (InceptionV3), and in the second case the 
 results were 96% (VGG-16) and 95% (InceptionV3). Based on these results, training a pre-trained 
-DINOv2 model using fine-tuning seems to provide a superior accuracy than the use of conventional 
+DINOv2 model using fine-tuning seems to provide a superior accuracy (~98%) than conventional 
 CNNs.
 
 <p>
