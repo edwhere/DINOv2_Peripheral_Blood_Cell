@@ -63,8 +63,7 @@ related to a mismatch between np.ndarray and numpy.ndarray.
 
 ### Usage
 
-Download the Peripheral Blood Cell dataset. 
-
+#### Generate train, validation, and test datasets
 Use `gen_trn_val.py` to partition the data in train, validation, and test subsets. 
 Use the `-h` argument to determine required and optional arguments. 
 
@@ -72,6 +71,7 @@ The script generates an output root directory, which contains `TRN`, `VAL`, and 
 folders. Each folder contains 8 subdirectories, one per class. The class subdirectories 
 contain the jpg images. 
 
+#### Train a DINOv2 model using either fine-tuning or transfer-learning
 Use `train.py` to train a DINOv2 model to classify peripheral blood cells. Use the `-h` 
 option to find the required and optional arguments. The script needs the input data 
 directory and generates results in an output directory. 
@@ -81,6 +81,12 @@ With 21 million parameters, this is the smallest model from the family. The mode
 is pre-trained using ImageNet data. By default `train.py` will train the model using 
 transfer learning, that is, we only train a final linear classification layer added 
 to the model. However, the flag`--fine_tune`enables training of all layers.
+
+#### Perform inference using a trained DINOv2 model
+Use `infer.py` to perform inference on all images stored in a directory. 
+Use the `-h` options to find required and optional arguments. The script 
+needs an input directory of images and a trained model `.pth` file. The 
+results can be displayed on screen or saved to a CSV file.
 
 ### Results
 The code in this repository implements a pre-trained DINOv2 with an additional linear layer 
